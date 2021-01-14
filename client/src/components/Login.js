@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import "./Login.css";
 
 import AuthService from "../services/auth.service";
 
@@ -75,7 +76,8 @@ const Login = (props) => {
   };
 
   return (
-    <div className="col-md-12">
+    <div className="col-md-12 login">
+      <h1>Bienvenue sur notre application ! (alpha)</h1>
       <div>
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
