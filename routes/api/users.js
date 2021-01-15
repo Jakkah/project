@@ -73,20 +73,6 @@ router.post("/login", (req, res) => {
           id: user.id,
           username: user.username,
         };
-        // Sign token
-        // jwt.sign(
-        //   payload,
-        //   keys.secretOrKey,
-        //   {
-        //     expiresIn: 31556926, // 1 year in seconds
-        //   },
-        //   (err, token) => {
-        //     res.json({
-        //       success: true,
-        //       token: "Bearer " + token,
-        //     });
-        //   }
-        // );
         const token = jwt.sign(payload, keys.secretOrKey, {
           expiresIn: 86400, // 24 hours
         });
@@ -104,6 +90,24 @@ router.post("/login", (req, res) => {
       }
     });
   });
+});
+
+//@route Get api/user/
+//@desc Get all User
+//@acces Public
+router.get("/all", (req, res) => {
+  User.find()
+    .then((user) => res.json(user))
+    .catch((err) => res.status(404).json({ succes: false }));
+});
+
+//@route Get api/user/:id
+//@desc Get an User by id
+//@acces Public
+router.get("/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => res.json(user))
+    .catch((err) => res.status(404).json({ succes: false }));
 });
 
 // @route   DELETE api/user/:id
