@@ -38,7 +38,10 @@ router.post("/register", (req, res) => {
           newUser.password = hash;
           newUser
             .save()
-            .then((user) => res.json(user))
+            .then((user) => {
+              res.json(user);
+              res.redirect("/register");
+            })
             .catch((err) => console.log(err));
         });
       });
@@ -77,11 +80,8 @@ router.post("/login", (req, res) => {
           expiresIn: 86400, // 24 hours
         });
         res.status(200).send({
-          id: user._id,
-          username: user.username,
-          email: user.email,
+          user: user,
           accessToken: token,
-          type: user.type,
         });
       } else {
         return res
@@ -92,11 +92,20 @@ router.post("/login", (req, res) => {
   });
 });
 
-//@route Get api/user/
+//@route Get api/user/candidat
 //@desc Get all User
 //@acces Public
-router.get("/all", (req, res) => {
-  User.find()
+router.get("/candidat", (req, res) => {
+  User.find({ type: "candidat" })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(404).json({ succes: false }));
+});
+
+//@route Get api/user/client
+//@desc Get all User
+//@acces Public
+router.get("/client", (req, res) => {
+  User.find({ type: "client" })
     .then((user) => res.json(user))
     .catch((err) => res.status(404).json({ succes: false }));
 });
@@ -108,6 +117,34 @@ router.get("/:id", (req, res) => {
   User.findById(req.params.id)
     .then((user) => res.json(user))
     .catch((err) => res.status(404).json({ succes: false }));
+});
+
+//@route Get api/user/
+//@desc Get all User
+//@acces Public
+router.get("/candidat", (req, res) => {
+  User.find({ type: "candidat" })
+    .then((user) => res.json(user))
+    .catch((err) => res.status(404).json({ succes: false }));
+});
+
+//@route PUT api/update/id
+//@desc Update user by id
+//@acces Public
+router.put("/update/id", (req, res) => {
+  User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot update with id=${id}.`,
+        });
+      } else res.send({ message: "Profil was updated successfully." });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: `Error updating with id= + ${id}`,
+      });
+    });
 });
 
 // @route   DELETE api/user/:id

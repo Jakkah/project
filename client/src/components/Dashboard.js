@@ -1,42 +1,71 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AuthService from "../services/auth.service";
+import { Jumbotron, Button, ListGroup, ListGroupItem } from "reactstrap";
+import "./Dashboard.css";
 
 const createHistory = require("history").createBrowserHistory;
 const history = createHistory();
 
 const Dashboard = () => {
-  const currentUser = AuthService.getCurrentUser();
-  const [data, setData] = useState({});
-
+  const currentUser = AuthService.getCurrentUser().user;
+  const [showIt, setShowIt] = useState(false);
+  const update = () => {
+    setShowIt(!showIt);
+    console.log(showIt);
+  };
   if (!currentUser) {
     history.push("/");
     window.location.reload();
   }
-  useEffect(() => {
-    const API_URL = "http://localhost:5000/api/users/" + currentUser.id;
+  const liste = Object.values(currentUser.skills);
+  // useEffect(() => {
+  //   const API_URL = "http://localhost:5000/api/users/" + currentUser.id;
 
-    const fetchData = async () => {
-      const result = await axios(API_URL);
+  //   const fetchData = async () => {
+  //     const result = await axios(API_URL);
 
-      setData(result.data);
-    };
+  //     setData(result.data);
+  //   };
 
-    fetchData();
-  }, []);
-  console.log(data);
+  //   fetchData();
+  // }, []);
+
   return (
     <div className="container">
-      <h1>DashBoard</h1>
-      <header className="jumbotron">
-        <h3>
-          <strong>{data.username}</strong>
-        </h3>
-        <p>{data.type}</p>
-      </header>
-      <h4>Metier</h4>
-      <button>X</button>
-      <h4>Compétences: {data.skills}</h4>
+      <h1>Tableau de bord</h1>
+      <Jumbotron>
+        <Button className="update" onClick={update}>
+          X
+        </Button>
+        {showIt ? (
+          <div>
+            <input value={currentUser.username} />
+          </div>
+        ) : (
+          <h3>{currentUser.username}</h3>
+        )}
+        {showIt ? (
+          <div>
+            <input value={currentUser.email} />
+          </div>
+        ) : (
+          <p>{currentUser.email}</p>
+        )}
+        {showIt ? (
+          <div>
+            <input value={currentUser.type} />
+          </div>
+        ) : (
+          <p>{currentUser.type}</p>
+        )}
+      </Jumbotron>
+      <ListGroup>
+        <h4>Compétences</h4>
+        {liste.map((skill, index) => {
+          return <ListGroupItem key={index}>{skill}</ListGroupItem>;
+        })}
+      </ListGroup>
     </div>
   );
 };

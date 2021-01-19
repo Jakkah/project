@@ -1,21 +1,18 @@
-import "./App.css";
 import React, { useState, useEffect } from "react";
-import Menu from "./components/Menu";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Profil from "./components/Profil";
-import Formulaire from "./components/Formulaire";
+
+import "./App.css";
 import "holderjs";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 import AuthService from "./services/auth.service";
 
-import Register from "./components/Register";
+import Menu from "./components/Menu";
 import Login from "./components/Login";
+import Profil from "./components/Profil";
+import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
-
-// import BoardCandidat from "./components/BoardCandidat";
-// import BoardClient from "./components/BoardClient";
-// import BoardAdmin from "./components/BoardAdmin";
+import Formulaire from "./components/Formulaire";
 
 function App() {
   const [showAdminBoard, setShowAdminBoard] = useState(false);
@@ -24,10 +21,8 @@ function App() {
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (user) {
-      setCurrentUser(`${user.type}`);
-      console.log(currentUser);
-      setShowAdminBoard(user.type.includes("admin"));
-      console.log(showAdminBoard);
+      setCurrentUser(`${user.user.type}`);
+      setShowAdminBoard(user.user.type.includes("admin"));
     }
   }, [currentUser]);
 
