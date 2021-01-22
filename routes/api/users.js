@@ -80,7 +80,10 @@ router.post("/login", (req, res) => {
           expiresIn: 86400, // 24 hours
         });
         res.status(200).send({
-          user: user,
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          type: user.type,
           accessToken: token,
         });
       } else {
@@ -93,7 +96,7 @@ router.post("/login", (req, res) => {
 });
 
 //@route Get api/user/candidat
-//@desc Get all User
+//@desc Get all Candidat
 //@acces Public
 router.get("/candidat", (req, res) => {
   User.find({ type: "candidat" })
@@ -102,7 +105,7 @@ router.get("/candidat", (req, res) => {
 });
 
 //@route Get api/user/client
-//@desc Get all User
+//@desc Get all Client
 //@acces Public
 router.get("/client", (req, res) => {
   User.find({ type: "client" })
@@ -131,14 +134,19 @@ router.get("/candidat", (req, res) => {
 //@route PUT api/update/id
 //@desc Update user by id
 //@acces Public
-router.put("/update/id", (req, res) => {
+router.post("/:id/update", (req, res) => {
+  const id = req.params.id;
   User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
         res.status(404).send({
           message: `Cannot update with id=${id}.`,
         });
-      } else res.send({ message: "Profil was updated successfully." });
+      } else {
+        res
+          .status(200)
+          .send({ message: `Profil id=${id}, successfully updated` });
+      }
     })
     .catch((err) => {
       res.status(500).send({

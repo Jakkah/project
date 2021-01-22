@@ -21,8 +21,8 @@ function App() {
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (user) {
-      setCurrentUser(`${user.user.type}`);
-      setShowAdminBoard(user.user.type.includes("admin"));
+      setCurrentUser(`${user.type}`);
+      setShowAdminBoard(user.type.includes("admin"));
     }
   }, [currentUser]);
 

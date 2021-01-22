@@ -16,8 +16,8 @@ const createHistory = require("history").createBrowserHistory;
 const history = createHistory();
 
 const Dashboard = () => {
-  const currentUser = AuthService.getCurrentUser().user;
-  const API_URL = "http://localhost:5000/api/users/" + currentUser._id;
+  const currentUser = AuthService.getCurrentUser();
+  const API_URL = "http://localhost:5000/api/users/" + currentUser.id;
   if (!currentUser) {
     history.push("/");
     window.location.reload();
@@ -52,16 +52,24 @@ const Dashboard = () => {
     setNewSkill(e.target.value);
   };
 
-  const AddSkill = (e) => {
+  const AddSkill = async (e) => {
     e.preventDefault();
-    ListSkill.push(newSkill);
-    console.log(ListSkill);
-    setLoading(true);
+    setListSkill((ListSkill) => [...ListSkill, newSkill]);
+    const skills = {};
+    Object.assign(skills, ListSkill);
+    return await axios.post(API_URL + "/update", skills).then((response) => {
+      if (response === 200) {
+        setLoading(true);
+      }
+      console.log(ListSkill);
+      return response;
+    });
   };
-  const Render = () => {
-    return (
-      <div>
-        <h1>Tableau de bord</h1>
+
+  return (
+    <div className="container">
+      <h1>Tableau de bord</h1>
+      {!Loading ? (
         <Jumbotron>
           <CardImg
             top
@@ -76,32 +84,35 @@ const Dashboard = () => {
           <p>{data.email}</p>
           <p>{data.type}</p>
         </Jumbotron>
-
+      ) : (
+        <h1>Loading</h1>
+      )}
+      <div>
         <Button className="update float-right" onClick={update}>
           Update
         </Button>
-        <ListGroup>
-          <h4>Compétences</h4>
-          {ListSkill.map((skill, index) => {
-            return <ListGroupItem key={index}>{skill}</ListGroupItem>;
-          })}
-        </ListGroup>
-        <Form className="col-12" onSubmit={AddSkill}>
-          <Input
-            type="text"
-            name="newSkill"
-            id="newSkill"
-            placeholder="Ajouter une compétence"
-            onChange={handleNewSkill}
-          />
-          <Button> Ajouter </Button>
-        </Form>
       </div>
-    );
-  };
-
-  return (
-    <div className="container">{Loading ? <h1>Loading</h1> : <Render />}</div>
+      <ListGroup>
+        <h4>Compétences</h4>
+        {!Loading ? (
+          ListSkill.map((skill, index) => {
+            return <ListGroupItem key={index}>{skill}</ListGroupItem>;
+          })
+        ) : (
+          <h1>Loading</h1>
+        )}
+      </ListGroup>
+      <Form className="col-12" onSubmit={AddSkill}>
+        <Input
+          type="text"
+          name="newSkill"
+          id="newSkill"
+          placeholder="Ajouter une compétence"
+          onChange={handleNewSkill}
+        />
+        <Button> Ajouter </Button>
+      </Form>
+    </div>
   );
 };
 

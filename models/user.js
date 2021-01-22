@@ -19,6 +19,18 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  skills: {
+    type: Object,
+    required: false,
+  },
+  exp: {
+    type: Object,
+    required: false,
+  },
+  offer: {
+    type: Object,
+    required: false,
+  },
   date: {
     type: Date,
     default: Date.now,
