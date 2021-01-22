@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import Candidat from "./Candidat";
-import Competences from "./Competences";
+import Client from "./Client";
 import authservice from "../services/auth.service";
 
 const Profil = (props) => {
@@ -59,7 +59,7 @@ const Profil = (props) => {
         <TabPane tabId="2">
           <Row>
             <Col sm="12">
-              <Competences />
+              <Client />
             </Col>
           </Row>
         </TabPane>

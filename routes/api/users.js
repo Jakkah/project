@@ -99,17 +99,17 @@ router.post("/login", (req, res) => {
 //@desc Get all Candidat
 //@acces Public
 router.get("/candidat", (req, res) => {
-  User.find({ type: "candidat" })
+  User.find({ type: "Candidat" })
     .then((user) => res.json(user))
-    .catch((err) => res.status(404).json({ succes: false }));
+    .catch((err) => res.status(404).json({ success: false }));
 });
 
 //@route Get api/user/client
 //@desc Get all Client
 //@acces Public
 router.get("/client", (req, res) => {
-  User.find({ type: "client" })
-    .then((user) => res.json(user))
+  User.find({ type: "Client" })
+    .then((user) => res.send(user))
     .catch((err) => res.status(404).json({ succes: false }));
 });
 
@@ -118,15 +118,6 @@ router.get("/client", (req, res) => {
 //@acces Public
 router.get("/:id", (req, res) => {
   User.findById(req.params.id)
-    .then((user) => res.json(user))
-    .catch((err) => res.status(404).json({ succes: false }));
-});
-
-//@route Get api/user/
-//@desc Get all User
-//@acces Public
-router.get("/candidat", (req, res) => {
-  User.find({ type: "candidat" })
     .then((user) => res.json(user))
     .catch((err) => res.status(404).json({ succes: false }));
 });
