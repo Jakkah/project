@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, FormGroup, Label, Input, FormText, Button } from "reactstrap";
 
 const Formulaire = (props) => {
@@ -14,22 +14,17 @@ const Formulaire = (props) => {
         </Input>
       </FormGroup>
       <FormGroup>
-        <Label for="exampleText" hidden>
+        <Label for="Text" hidden>
           Text Area
         </Label>
-        <Input type="textarea" name="text" id="exampleText" />
+        <Input
+          type="textarea"
+          name="text"
+          id="Text"
+          placeholder="En quoi puis-je vous aider ?"
+        />
       </FormGroup>
-      <FormGroup>
-        <Label for="exampleFile" hidden>
-          File
-        </Label>
-        <Input type="file" name="file" id="exampleFile" />
-        <FormText color="muted">
-          This is some placeholder block-level help text for the above input.
-          It's a bit lighter and easily wraps to a new line.
-        </FormText>
-        <Button>Submit</Button>
-      </FormGroup>
+      <Button>Submit</Button>
     </Form>
   );
 };

@@ -20,15 +20,15 @@ const UserSchema = new Schema({
     required: true,
   },
   skills: {
-    type: Object,
+    type: Array,
     required: false,
   },
   exp: {
-    type: Object,
+    type: Array,
     required: false,
   },
   offer: {
-    type: Object,
+    type: Array,
     required: false,
   },
   description: {

@@ -3,12 +3,16 @@ import axios from "axios";
 import AuthService from "../services/auth.service";
 import {
   Jumbotron,
+  Spinner,
   Button,
   ListGroup,
   ListGroupItem,
   CardImg,
   Input,
   Form,
+  Container,
+  Row,
+  Col,
 } from "reactstrap";
 import "./Dashboard.css";
 
@@ -27,17 +31,18 @@ const Dashboard = () => {
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
   const [showIt, setShowIt] = useState(false);
-  const [newSkill, setNewSkill] = useState("");
+  const [newElement, setNewElement] = useState("");
   const [data, setData] = useState();
   const [Loading, setLoading] = useState(true);
-  const [ListSkill, setListSkill] = useState();
+  const [ListSkill, setListSkill] = useState([]);
+  const [ListExp, setListExp] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(API_URL);
       setData(result.data);
-      setListSkill(Object.values(result.data.skills));
-      console.log(Loading);
+      setListSkill(result.data.skills);
+      setListExp(result.data.exp);
       setLoading(false);
     };
     fetchData();
@@ -48,70 +53,115 @@ const Dashboard = () => {
     console.log(showIt);
   };
 
-  const handleNewSkill = (e) => {
-    setNewSkill(e.target.value);
+  const handleNewElement = (e) => {
+    setNewElement(e.target.value);
   };
 
   const AddSkill = async (e) => {
     e.preventDefault();
-    setListSkill((ListSkill) => [...ListSkill, newSkill]);
-    const skills = {};
-    Object.assign(skills, ListSkill);
-    return await axios.post(API_URL + "/update", skills).then((response) => {
-      if (response === 200) {
-        setLoading(true);
-      }
-      console.log(ListSkill);
-      return response;
-    });
+    let skills = [];
+    try {
+      skills = [...ListSkill, newElement];
+    } catch (error) {
+    } finally {
+      return await axios
+        .patch(API_URL + "/update", { skills })
+        .then((response) => {
+          if (response.status === 200) {
+            setLoading(true);
+          }
+          return response;
+        });
+    }
+  };
+  const AddExp = async (e) => {
+    e.preventDefault();
+    let exp = [];
+    try {
+      exp = [...ListExp, newElement];
+    } catch (error) {
+    } finally {
+      return await axios
+        .patch(API_URL + "/update", { exp })
+        .then((response) => {
+          if (response.status === 200) {
+            setLoading(true);
+          }
+          return response;
+        });
+    }
   };
 
   return (
     <div className="container">
-      <h1>Tableau de bord</h1>
       {!Loading ? (
-        <Jumbotron>
-          <CardImg
-            top
-            src={image}
-            className="pull-right float-right img-fluid d-none d-sm-block image"
-            alt="profil_image"
-          />
-          <div>
-            <h3>{data.username}</h3>
-            <h6>{data.job}</h6>
-          </div>
-          <p>{data.email}</p>
-          <p>{data.type}</p>
-        </Jumbotron>
+        <Container>
+          <Jumbotron>
+            <CardImg
+              src={image}
+              className="pull-right float-right img-fluid d-none d-sm-block image"
+              alt="profil_image"
+            />
+            <div>
+              <h3>{data.username}</h3>
+              <h6>{data.job}</h6>
+            </div>
+            <p>{data.email}</p>
+          </Jumbotron>
+        </Container>
       ) : (
-        <h1>Loading</h1>
+        <Spinner color="primary" />
       )}
-      <div>
-        <Button className="update float-right" onClick={update}>
-          Update
-        </Button>
-      </div>
-      <ListGroup>
-        <h4>Compétences</h4>
-        {!Loading ? (
-          ListSkill.map((skill, index) => {
-            return <ListGroupItem key={index}>{skill}</ListGroupItem>;
-          })
-        ) : (
-          <h1>Loading</h1>
-        )}
-      </ListGroup>
-      <Form className="col-12" onSubmit={AddSkill}>
-        <Input
-          type="text"
-          name="newSkill"
-          id="newSkill"
-          placeholder="Ajouter une compétence"
-          onChange={handleNewSkill}
-        />
-        <Button> Ajouter </Button>
-      </Form>
+      <Container>
+        <row>
+          <ListGroup>
+            <h4>Compétences</h4>
+            {!Loading ? (
+              ListSkill.map((skill, index) => {
+                return <ListGroupItem key={index}>{skill}</ListGroupItem>;
+              })
+            ) : (
+              <Spinner color="primary" />
+            )}
+          </ListGroup>
+
+          <Form className="col-12" onSubmit={AddSkill}>
+            <Input
+              type="text"
+              name="newSkill"
+              id="newSkill"
+              placeholder="Ajouter une compétence"
+              value={newElement}
+              onChange={handleNewElement}
+            />
+            <Button> Ajouter </Button>
+          </Form>
+        </row>
+        <row>
+          <ListGroup>
+            <h4>Expériences</h4>
+            {!Loading ? (
+              ListExp.map((exp, index) => {
+                return <ListGroupItem key={index}>{exp}</ListGroupItem>;
+              })
+            ) : (
+              <Spinner color="primary" />
+            )}
+          </ListGroup>
+
+          <Form className="col-12" onSubmit={AddExp}>
+            <Input
+              type="text"
+              name="newSkill"
+              id="newSkill"
+              placeholder="Ajouter une expérience"
+              value={newElement}
+              onChange={handleNewElement}
+            />
+            <Button> Ajouter </Button>
+          </Form>
+        </row>
+      </Container>
     </div>
   );
 };

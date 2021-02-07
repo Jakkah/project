@@ -125,7 +125,7 @@ router.get("/:id", (req, res) => {
 //@route PUT api/update/id
 //@desc Update user by id
 //@acces Public
-router.post("/:id/update", (req, res) => {
+router.patch("/:id/update", (req, res) => {
   const id = req.params.id;
   User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {

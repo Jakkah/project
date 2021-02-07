@@ -8,6 +8,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "./services/auth.service";
 
 import Menu from "./components/Menu";
+import Offre from "./components/Offre";
 import Login from "./components/Login";
 import Profil from "./components/Profil";
 import Register from "./components/Register";
@@ -43,7 +44,7 @@ function App() {
           </Route>
           <Route path="/offres">
             <Menu AccountType={currentUser} />
-            <h2>Offres</h2>
+            <Offre />
           </Route>
           <Route path="/contact">
             <Menu AccountType={currentUser} />

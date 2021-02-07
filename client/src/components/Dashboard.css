@@ -1,5 +1,6 @@
 .image {
-  width: 200px;
+  width: 150px;
+  height: auto;
 }
 input[type="text"] {
   width: 100%;

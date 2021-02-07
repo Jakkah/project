@@ -8,6 +8,7 @@ import {
   CardTitle,
   CardSubtitle,
   Button,
+  Spinner,
 } from "reactstrap";
 
 function Candidat() {
@@ -46,7 +47,7 @@ function Candidat() {
             Sint incididunt proident incididunt anim do et veniam deserunt
             culpa.
           </CardText>
-          <Button className="mx-auto btn">More</Button>
+          <Button className="mx-auto btn">Détails</Button>
         </CardBody>
       </Card>
     );
@@ -59,7 +60,7 @@ function Candidat() {
           <CardCandidat index={index} candidat={candidat} />
         ))
       ) : (
-        <h1>Loading</h1>
+        <Spinner color="primary" />
       )}
     </div>
   );
